@@ -11,6 +11,7 @@ import MenuList from '@mui/material/MenuList';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
+import { useAuth } from "@workos-inc/authkit-react";
 
 import { useRouter, usePathname } from 'src/routes/hooks';
 
@@ -29,6 +30,8 @@ export type AccountPopoverProps = IconButtonProps & {
 
 export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps) {
   const router = useRouter();
+
+  const { signOut } = useAuth();
 
   const pathname = usePathname();
 
@@ -49,6 +52,22 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
     },
     [handleClosePopover, router]
   );
+
+  const handleLogout = async () => {
+
+    localStorage.clear();
+    sessionStorage.clear();
+
+    try {
+      await signOut();
+
+    } catch (error) {
+      console.error("Sing Out Erorr", error);
+      
+    }
+
+  };
+
 
   return (
     <>
@@ -127,8 +146,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
         </MenuList>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <Box sx={{ p: 1 }}>
+        <Box sx={{ p: 1 }} onClick={handleLogout}>
           <Button fullWidth color="error" size="medium" variant="text">
             Logout
           </Button>

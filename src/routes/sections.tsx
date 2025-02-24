@@ -7,6 +7,8 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
+import { useAuth } from '@workos-inc/authkit-react';
+import StocksPage from 'src/pages/stocks';
 
 // ----------------------------------------------------------------------
 
@@ -33,20 +35,29 @@ const renderFallback = (
 );
 
 export function Router() {
-  return useRoutes([
+
+  const { user, isLoading } = useAuth();
+
+  const routes = [
     {
-      element: (
+      element: user ? (
         <DashboardLayout>
           <Suspense fallback={renderFallback}>
             <Outlet />
           </Suspense>
         </DashboardLayout>
+      ) : (
+        <Navigate to="/sign-in" replace />
       ),
       children: [
         { element: <HomePage />, index: true },
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
+        {
+          path: 'stocks',
+          element: <StocksPage />,
+        }
       ],
     },
     {
@@ -65,5 +76,12 @@ export function Router() {
       path: '*',
       element: <Navigate to="/404" replace />,
     },
-  ]);
+  ];
+
+  const element = useRoutes(routes);
+
+
+  if (isLoading) return <p>Loading...</p>;
+
+  return element;
 }
