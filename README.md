@@ -47,3 +47,4 @@ Distributed under the [MIT](https://github.com/minimal-ui-kit/minimal.free/blob/
 
 Email: support@minimals.cc
 # minimal-dashboard
+# minimal-dashboard
