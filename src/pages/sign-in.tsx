@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function Page() {
-  const { user, isLoading, signIn, signOut } = useAuth();
+  const { user, isLoading, signIn } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +26,6 @@ export default function Page() {
 
   useEffect(() => {
     if (!user && !isLoading) {
-      console.log("Usuario deslogueado, redirigiendo a Sign In...");
       navigate('/sign-in');
     }
   }, [user, isLoading, navigate]);
@@ -35,27 +34,7 @@ export default function Page() {
   if (isLoading) return <p>Loading...</p>;
   return (
     <>
-      {user ? (
-        <>
-          <p>Welcome, {user.email}!</p>
-          <button 
-            type="button" 
-            onClick={() => {
-              console.log("Ejecutando logout...");
-              signOut();
-            }}
-          >
-         tu   Sign Out
-          </button>
-        </>
-      ) : (
-        <button 
-          type="button" 
-          onClick={() => signIn()}
-        >
-          Sign In
-        </button>
-      )}
+      {!user &&  <p>Loading...</p>}
     </>
   );
 }
